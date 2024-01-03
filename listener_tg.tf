@@ -14,13 +14,17 @@ resource "aws_lb_listener" "listener" {
   ssl_policy        = var.ssl_policy
   certificate_arn   = var.certificate_arn
 
-  default_action {
-    type = "fixed-response"
+  dynamic "default_action" {
+    for_each = var.listener_default_action_fixed_response
 
-    fixed_response {
-      content_type = var.content_type
-      message_body = var.message_body
-      status_code  = var.status_code
+    content {
+      type = "fixed-response"
+
+      fixed_response {
+        content_type = default_action.value.content_type
+        message_body = default_action.value.message_body
+        status_code  = default_action.value.status_code
+      }
     }
   }
 }

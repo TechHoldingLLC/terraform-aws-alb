@@ -100,22 +100,18 @@ variable "ssl_policy" {
   default     = ""
 }
 
-variable "content_type" {
-  description = "The content type. Valid values are text/plain, text/css, text/html, application/javascript and application/json"
-  type        = string
-  default     = "text/plain"
-}
-
-variable "message_body" {
-  description = "The message body."
-  type        = string
-  default     = "Bad request"
-}
-
-variable "status_code" {
-  description = "The HTTP response code. Valid values are 2XX, 4XX, or 5XX"
-  type        = string
-  default     = "400"
+variable "listener_default_action_fixed_response" {
+  description = "Default actions for the listener"
+  type = list(object({
+    content_type = string
+    message_body = string
+    status_code  = number
+  }))
+  default = [{
+    content_type = "text/plain"
+    message_body = "Bad request"
+    status_code  = 400
+  }]
 }
 
 #####################################

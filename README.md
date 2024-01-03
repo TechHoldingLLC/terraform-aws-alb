@@ -32,7 +32,6 @@ No modules.
 | <a name="input_alb_arn"></a> [alb\_arn](#input\_alb\_arn) | ALB arn | `string` | `""` | no |
 | <a name="input_attach_certificate"></a> [attach\_certificate](#input\_attach\_certificate) | Indicate whether a new certificate needs to be attached | `bool` | `false` | no |
 | <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | The ARN of the certificate to attach to the listener | `string` | `""` | no |
-| <a name="input_content_type"></a> [content\_type](#input\_content\_type) | The content type. Valid values are text/plain, text/css, text/html, application/javascript and application/json | `string` | `"text/plain"` | no |
 | <a name="input_create_alb"></a> [create\_alb](#input\_create\_alb) | Create ALB | `bool` | `false` | no |
 | <a name="input_create_alb_listener"></a> [create\_alb\_listener](#input\_create\_alb\_listener) | Create ALB Listener | `bool` | `false` | no |
 | <a name="input_enable_deletion_protection"></a> [enable\_deletion\_protection](#input\_enable\_deletion\_protection) | If true, deletion of the load balancer will be disabled via the AWS API. | `bool` | `true` | no |
@@ -40,13 +39,12 @@ No modules.
 | <a name="input_idle_timeout"></a> [idle\_timeout](#input\_idle\_timeout) | The time in seconds that the connection is allowed to be idle | `number` | `60` | no |
 | <a name="input_internal"></a> [internal](#input\_internal) | If true, the LB will be internal | `bool` | `true` | no |
 | <a name="input_listener_arn"></a> [listener\_arn](#input\_listener\_arn) | The ARN of the listener to which to attach the rule | `string` | `""` | no |
-| <a name="input_message_body"></a> [message\_body](#input\_message\_body) | The message body. | `string` | `"Bad request"` | no |
+| <a name="input_listener_default_action_fixed_response"></a> [listener\_default\_action\_fixed\_response](#input\_listener\_default\_action\_fixed\_response) | Default actions for the listener | <pre>list(object({<br>    content_type = string<br>    message_body = string<br>    status_code  = number<br>  }))</pre> | <pre>[<br>  {<br>    "content_type": "text/plain",<br>    "message_body": "Bad request",<br>    "status_code": 400<br>  }<br>]</pre> | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the LB | `string` | `""` | no |
 | <a name="input_port"></a> [port](#input\_port) | The port on which the load balancer is listening | `string` | `"80"` | no |
 | <a name="input_protocol"></a> [protocol](#input\_protocol) | The protocol for connections from clients to the load balancer | `string` | `"HTTP"` | no |
 | <a name="input_security_groups"></a> [security\_groups](#input\_security\_groups) | The list of security groups for ALB. | `list(any)` | `[]` | no |
 | <a name="input_ssl_policy"></a> [ssl\_policy](#input\_ssl\_policy) | The name of the SSL Policy for the listener. Required if protocol is HTTPS or TLS | `string` | `""` | no |
-| <a name="input_status_code"></a> [status\_code](#input\_status\_code) | The HTTP response code. Valid values are 2XX, 4XX, or 5XX | `string` | `"400"` | no |
 | <a name="input_stickiness"></a> [stickiness](#input\_stickiness) | A Stickiness block | <pre>list(object({<br>    type            = string<br>    cookie_duration = number<br>  }))</pre> | <pre>[<br>  {<br>    "cookie_duration": 86400,<br>    "type": "lb_cookie"<br>  }<br>]</pre> | no |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | A list of subnet IDs to attach to the LB | `list(string)` | `[]` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
@@ -64,7 +62,3 @@ No modules.
 | <a name="output_port"></a> [port](#output\_port) | # All the below listed outputs returns value only when var.create\_alb\_listener is true, otherwise they return an empty string ("") |
 | <a name="output_target_group_arn"></a> [target\_group\_arn](#output\_target\_group\_arn) | n/a |
 | <a name="output_target_group_arn_suffix"></a> [target\_group\_arn\_suffix](#output\_target\_group\_arn\_suffix) | n/a |
-
-## License
-
-Apache 2 Licensed. See [LICENSE](https://github.com/TechHoldingLLC/terraform-aws-alb/blob/main/LICENSE) for full details.
