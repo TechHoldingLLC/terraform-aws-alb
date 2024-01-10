@@ -49,6 +49,7 @@ module "alb_listener" {
 ```
 
 ### If you want to create ALB Listener of HTTPS protocol and Target Group only, pass below inputs according to your requirements
+```
 module "acm" {
   source          = "./acm"
   domain_name     = "example.com"
@@ -78,6 +79,7 @@ module "alb_listener_https" {
     aws = aws
   }
 }
+```
 
 ### If you want to create ALB with its Listener and Target Group, pass below inputs according to your requirements
 ```
