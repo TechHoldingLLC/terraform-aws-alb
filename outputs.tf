@@ -31,3 +31,7 @@ output "target_group_arn" {
 output "target_group_arn_suffix" {
   value = var.create_alb_listener ? aws_lb_target_group.target_group[0].arn_suffix : ""
 }
+
+output "zone_id" {
+  value = var.create_alb ? aws_lb.alb[0].zone_id : null
+} 
