@@ -41,7 +41,7 @@ variable "tags" {
 variable "internal" {
   description = "If true, the LB will be internal"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "subnets" {
