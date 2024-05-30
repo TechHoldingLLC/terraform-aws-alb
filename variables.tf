@@ -82,36 +82,10 @@ variable "alb_arn" {
   default     = ""
 }
 
-variable "port" {
-  description = "The port on which the load balancer is listening"
-  type        = string
-  default     = "80"
-}
-
-variable "protocol" {
-  description = "The protocol for connections from clients to the load balancer"
-  type        = string
-  default     = "HTTP"
-}
-
-variable "ssl_policy" {
-  description = "The name of the SSL Policy for the listener. Required if protocol is HTTPS or TLS"
-  type        = string
-  default     = ""
-}
-
-variable "listener_default_action_fixed_response" {
-  description = "Default actions for the listener"
-  type = list(object({
-    content_type = string
-    message_body = string
-    status_code  = number
-  }))
-  default = [{
-    content_type = "text/plain"
-    message_body = "Bad request"
-    status_code  = 400
-  }]
+variable "listeners" {
+  description = "Map of listener configurations to create"
+  type        = any
+  default     = {}
 }
 
 #####################################
@@ -140,32 +114,8 @@ variable "listener_arn" {
 #  TARGET GROUP VARIABLES #
 #####################################
 
-variable "target_group_name" {
-  description = "Target group name"
-  type        = string
-  default     = ""
-}
-
-variable "target_type" {
-  description = "Type of target that you must specify when registering targets with this target group"
-  type        = string
-  default     = "instance"
-}
-
-variable "stickiness" {
-  description = " A Stickiness block"
-  type = list(object({
-    type            = string
-    cookie_duration = number
-  }))
-  default = [{
-    type            = "lb_cookie"
-    cookie_duration = 86400
-  }]
-}
-
-variable "health_check" {
-  description = "Listener Rule Health Check"
-  type        = map(string)
+variable "target_groups" {
+  description = "Map of target group configurations to create"
+  type        = any
   default     = {}
 }

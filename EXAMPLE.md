@@ -25,23 +25,41 @@ module "alb_listener" {
   source              = "./alb"
   create_alb_listener = true
   alb_arn             = module.alb.arn
-  target_group_name   = "my-alb-listener-http"
-  port                = 80
   vpc_id              = module.vpc.id
-  stickiness = [{
-    type            = "lb_cookie"
-    cookie_duration = 3600
-  }]
-  health_check = {
-    interval            = 30
-    path                = "/"
-    timeout             = 15
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    port                = 80
-    protocol            = "HTTP" # Other value is HTTPS
-    enabled             = true
+  listeners = {
+    http = {
+      port     = 80
+      protocol = "HTTP"
+      forward = {
+        target_group_key = "ex-instance"
+      }
+    }
   }
+  target_groups = {
+    ex-instance = {
+      name        = "my-alb-listener-http"
+      protocol    = "HTTP"
+      port        = 80
+      target_type = "instance"
+      target_id   = "i-instance-id"
+
+      stickiness = {
+        type            = "lb_cookie"
+        cookie_duration = 3600
+      }
+      health_check = {
+        interval            = 30
+        path                = "/"
+        timeout             = 15
+        healthy_threshold   = 2
+        unhealthy_threshold = 2
+        port                = 443
+        protocol            = "HTTPS" # Other value is HTTPS
+        enabled             = true
+      }
+    }
+  }
+  
   providers = {
     aws = aws
   }
@@ -60,21 +78,41 @@ module "alb_listener_https" {
   source              = "./alb"
   create_alb_listener = true
   alb_arn             = module.alb.arn
-  target_group_name   = "my-alb-listener-https"
-  port                = 443
-  protocol            = "HTTPS"
-  vpc_id              = module.vpc.id
-  certificate_arn     = module.acm.arn
-  health_check = {
-    interval            = 30
-    path                = "/"
-    timeout             = 15
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    port                = 80
-    protocol            = "HTTP"
-    enabled             = true
+  listeners = {
+    https = {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = module.acm.arn
+      forward = {
+        target_group_key = "ex-instance" #or we can pass arn of target group, ie. arn=var.tg_arn
+      }
+    }
   }
+  target_groups = {
+    ex-instance = {
+      name        = "my-alb-listener-https"
+      protocol    = "HTTPS"
+      port        = 443
+      target_type = "instance"
+      target_id   = "i-instance-id"
+
+      stickiness = {
+        type            = "lb_cookie"
+        cookie_duration = 3600
+      }
+      health_check = {
+        interval            = 30
+        path                = "/"
+        timeout             = 15
+        healthy_threshold   = 2
+        unhealthy_threshold = 2
+        port                = 443
+        protocol            = "HTTPS"
+        enabled             = true
+      }
+    }
+  }
+  vpc_id              = module.vpc.id
   providers = {
     aws = aws
   }
@@ -92,13 +130,55 @@ module "alb" {
   internal                   = true  # Give false value if you want to make it public.
   security_groups            = [module.sg.id]
   enable_deletion_protection = true
+  vpc_id                     = module.vpc.id
 
 # ALB Listener and Target Group
   create_alb_listener = true
-  alb_arn             = module.alb.arn
-  target_group_name   = "my-alb-listener"
-  port                = 80
-  vpc_id              = module.vpc.id
+
+  listeners = {
+    http = {
+      port     = 80
+      protocol = "HTTP"
+      fixed_response = {
+        content_type = "text/plain"
+        message_body = "Bad request"
+        status_code  = 400
+      }
+    }
+    https = {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = module.acm.arn
+      forward = {
+        target_group_key = "ex-instance"
+      }
+    }
+  }
+
+  target_groups = {
+    ex-instance = {
+      name        = "my-alb-listener-https"
+      protocol    = "HTTPS"
+      port        = 443
+      target_type = "instance"
+      target_id   = "i-instance-id"
+
+      stickiness = {
+        type            = "lb_cookie"
+        cookie_duration = 3600
+      }
+      health_check = {
+        interval            = 30
+        path                = "/"
+        timeout             = 15
+        healthy_threshold   = 2
+        unhealthy_threshold = 2
+        port                = 443
+        protocol            = "HTTPS"
+        enabled             = true
+      }
+    }
+  }
   stickiness = [{
     type            = "lb_cookie"
     cookie_duration = 3600
