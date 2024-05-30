@@ -82,18 +82,6 @@ variable "alb_arn" {
   default     = ""
 }
 
-variable "default_port" {
-  description = "Default port used across the listener and target group"
-  type        = number
-  default     = 80
-}
-
-variable "default_protocol" {
-  description = "Default protocol used across the listener and target group"
-  type        = string
-  default     = "HTTP"
-}
-
 variable "listeners" {
   description = "Map of listener configurations to create"
   type        = any

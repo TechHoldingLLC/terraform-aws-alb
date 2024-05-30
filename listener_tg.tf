@@ -10,8 +10,8 @@ resource "aws_lb_listener" "listener" {
   for_each = { for k, v in var.listeners : k => v if var.create_alb_listener }
 
   load_balancer_arn = local.alb_arn
-  port              = try(each.value.port, var.default_port)
-  protocol          = try(each.value.protocol, var.default_protocol)
+  port              = try(each.value.port, 80)
+  protocol          = try(each.value.protocol, "HTTP")
   ssl_policy        = try(each.value.ssl_policy, null)
   certificate_arn   = try(each.value.certificate_arn, null)
 
@@ -66,8 +66,8 @@ resource "aws_lb_target_group" "target_group" {
 
   name        = try(each.value.name, null)
   name_prefix = try(each.value.name_prefix, null)
-  port        = try(each.value.port, var.default_port)
-  protocol    = try(each.value.protocol, var.default_protocol)
+  port        = each.value.port
+  protocol    = try(each.value.protocol, "HTTP")
   target_type = try(each.value.target_type, "instance")
   vpc_id      = try(each.value.vpc_id, var.vpc_id)
 
@@ -86,7 +86,7 @@ resource "aws_lb_target_group" "target_group" {
     for_each = try([each.value.health_check], [])
 
     content {
-      enabled             = lookup(health_check.value, "enabled", null)
+      enabled             = lookup(health_check.value, "enabled", true)
       interval            = lookup(health_check.value, "interval", null)
       path                = lookup(health_check.value, "path", null)
       timeout             = lookup(health_check.value, "timeout", null)
