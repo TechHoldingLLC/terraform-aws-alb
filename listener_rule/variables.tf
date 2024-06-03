@@ -2,13 +2,6 @@
 #  variables.tf  #
 ##################
 
-
-
-###########################
-#  TARGET GROUP VARIABLES #
-###########################
-
-
 variable "rules" {
   description = "Map of listener rules configurations to create"
   type        = any

@@ -83,6 +83,25 @@ resource "aws_lb_listener_rule" "this" {
       }
     }
   }
+
+  dynamic "condition" {
+    for_each = [for condition in each.value.conditions : condition if contains(keys(condition), "source_ip")]
+
+    content {
+      dynamic "source_ip" {
+        for_each = try([condition.value.source_ip], [])
+
+        content {
+          values = source_ip.value.values
+        }
+      }
+    }
+  }
+
+  tags = merge(
+    try(each.value.tags, {}),
+    var.tags
+  )
 }
 
 resource "random_string" "random" {
@@ -92,16 +111,10 @@ resource "random_string" "random" {
   special = false
   upper   = false
   keepers = {
-    name                = try(each.value.name, null)
-    enabled             = lookup(each.value.health_check, "enabled", null)
-    interval            = lookup(each.value.health_check, "interval", null)
-    path                = lookup(each.value.health_check, "path", null)
-    timeout             = lookup(each.value.health_check, "timeout", null)
-    healthy_threshold   = lookup(each.value.health_check, "healthy_threshold", null)
-    unhealthy_threshold = lookup(each.value.health_check, "unhealthy_threshold", null)
-    port                = lookup(each.value.health_check, "port", null)
-    protocol            = lookup(each.value.health_check, "protocol", null)
-    matcher             = lookup(each.value.health_check, "matcher", null)
+    name        = try(each.value.name, null)
+    protocol    = try(each.value.protocol, null)
+    port        = try(each.value.port, null)
+    target_type = try(each.value.target_type, null)
   }
 }
 
@@ -112,7 +125,7 @@ resource "random_string" "random" {
 resource "aws_lb_target_group" "this" {
   for_each = { for k, v in var.target_groups : k => v if var.create_tg }
 
-  name        = try(each.value.name, null)
+  name        = try("${each.value.name}-${random_string.random[each.key].result}", null)
   name_prefix = try(each.value.name_prefix, null)
   port        = each.value.port
   protocol    = try(each.value.protocol, "HTTP")
