@@ -12,7 +12,7 @@ resource "aws_lb_listener" "listener" {
   load_balancer_arn = local.alb_arn
   port              = try(each.value.port, 80)
   protocol          = try(each.value.protocol, "HTTP")
-  ssl_policy        = try(each.value.ssl_policy, null)
+  ssl_policy        = lookup(each.value.ssl_policy, "ssl_policy", "ELBSecurityPolicy-TLS13-1-2-2021-06")
   certificate_arn   = try(each.value.certificate_arn, null)
 
   dynamic "default_action" {
