@@ -88,6 +88,12 @@ variable "listeners" {
   default     = {}
 }
 
+variable "ssl_policy" {
+  description = "The SSL policy for the ALB listener"
+  type        = string
+  default     = "ELBSecurityPolicy-2016-08"
+}
+
 #####################################
 #  LISTENER CERTIFICATE VARIABLES #
 #####################################
