@@ -71,6 +71,21 @@ resource "aws_lb_listener_rule" "this" {
   }
 
   dynamic "condition" {
+    for_each = [for condition in each.value.conditions : condition if contains(keys(condition), "other_header")]
+    content {
+
+      dynamic "http_header" {
+        for_each = try([condition.value.other_header], [])
+
+        content {
+          http_header_name = condition.http_header_name
+          values          = condition.values
+        }
+      }
+    }
+  }
+
+  dynamic "condition" {
     for_each = [for condition in each.value.conditions : condition if contains(keys(condition), "path_pattern")]
 
     content {
