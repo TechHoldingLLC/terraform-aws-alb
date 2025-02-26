@@ -18,7 +18,7 @@ resource "aws_lb" "alb" {
     content {
       bucket  = lookup(access_logs.value, "bucket", null)
       prefix  = lookup(access_logs.value, "prefix", null)
-      enabled = lookup(access_logs.value, "true", null)
+      enabled = lookup(access_logs.value, "enabled", false)
     }
   }
   tags = merge(
