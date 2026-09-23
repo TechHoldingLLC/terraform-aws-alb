@@ -66,6 +66,30 @@ variable "access_logs" {
   default = []
 }
 
+variable "enable_cloudwatch_logs" {
+  description = "Deliver ALB logs to CloudWatch Logs"
+  type        = bool
+  default     = true
+}
+
+variable "cloudwatch_log_types" {
+  description = "ALB log types to deliver. Valid values: ALB_ACCESS_LOGS, ALB_CONNECTION_LOGS, ALB_HEALTH_CHECK_LOGS"
+  type        = list(string)
+  default     = ["ALB_ACCESS_LOGS"]
+}
+
+variable "cloudwatch_log_group_name" {
+  description = "CloudWatch log group name for ALB logs. Defaults to /aws/alb/<name>"
+  type        = string
+  default     = null
+}
+
+variable "cloudwatch_log_retention_in_days" {
+  description = "Retention in days for the ALB CloudWatch log group"
+  type        = number
+  default     = 30
+}
+
 variable "security_groups" {
   description = "The list of security groups for ALB."
   type        = list(any)

@@ -3,13 +3,13 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.5 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.58 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.5 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.58 |
 
 ## Modules
 
@@ -23,6 +23,10 @@ No modules.
 | [aws_lb_listener.listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener) | resource |
 | [aws_lb_listener_certificate.listener_certificate](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener_certificate) | resource |
 | [aws_lb_target_group.target_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group) | resource |
+| [aws_cloudwatch_log_group.alb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_cloudwatch_log_delivery_source.alb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_delivery_source) | resource |
+| [aws_cloudwatch_log_delivery_destination.alb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_delivery_destination) | resource |
+| [aws_cloudwatch_log_delivery.alb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_delivery) | resource |
 
 ## Inputs
 
@@ -34,6 +38,10 @@ No modules.
 | <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | The ARN of the certificate to attach to the listener | `string` | `""` | no |
 | <a name="input_create_alb"></a> [create\_alb](#input\_create\_alb) | Create ALB | `bool` | `false` | no |
 | <a name="input_create_alb_listener"></a> [create\_alb\_listener](#input\_create\_alb\_listener) | Create ALB Listener | `bool` | `false` | no |
+| <a name="input_cloudwatch_log_group_name"></a> [cloudwatch\_log\_group\_name](#input\_cloudwatch\_log\_group\_name) | CloudWatch log group name for ALB logs. Defaults to /aws/alb/<name> | `string` | `null` | no |
+| <a name="input_cloudwatch_log_retention_in_days"></a> [cloudwatch\_log\_retention\_in\_days](#input\_cloudwatch\_log\_retention\_in\_days) | Retention in days for the ALB CloudWatch log group | `number` | `30` | no |
+| <a name="input_cloudwatch_log_types"></a> [cloudwatch\_log\_types](#input\_cloudwatch\_log\_types) | ALB log types to deliver to CloudWatch Logs. Valid values: `ALB_ACCESS_LOGS`, `ALB_CONNECTION_LOGS`, `ALB_HEALTH_CHECK_LOGS` | `list(string)` | `["ALB_ACCESS_LOGS"]` | no |
+| <a name="input_enable_cloudwatch_logs"></a> [enable\_cloudwatch\_logs](#input\_enable\_cloudwatch\_logs) | Deliver ALB logs to CloudWatch Logs (vended logs) | `bool` | `true` | no |
 | <a name="input_enable_deletion_protection"></a> [enable\_deletion\_protection](#input\_enable\_deletion\_protection) | If true, deletion of the load balancer will be disabled via the AWS API. | `bool` | `true` | no |
 | <a name="input_idle_timeout"></a> [idle\_timeout](#input\_idle\_timeout) | The time in seconds that the connection is allowed to be idle | `number` | `60` | no |
 | <a name="input_internal"></a> [internal](#input\_internal) | If true, the LB will be internal | `bool` | `false` | no |
